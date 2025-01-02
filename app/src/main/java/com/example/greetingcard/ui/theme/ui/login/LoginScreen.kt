@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.login
+package com.example.greetingcard.ui.theme.ui.login
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -37,17 +37,28 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.greetingcard.R
+import com.example.greetingcard.ui.theme.restapi.login.LoginViewModel
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier
 ) {
 
+    // login variable
+    val loginViewModel: LoginViewModel = viewModel()
+
+    val isLoading = loginViewModel.isLoading.value;
+    val loginResult = loginViewModel.loginResult.value;
+    val errorMessage = loginViewModel.errorMessage.value;
+
     var userInput by remember { mutableStateOf(TextFieldValue()) }
     var passwordInput by remember{ mutableStateOf(TextFieldValue()) }
     var shouldShowPwd by remember { mutableStateOf(false) }
     var checkboxStatus by remember {  mutableStateOf(false) }
+
+
 
     val paddingModifier = Modifier
         .fillMaxWidth()
@@ -146,7 +157,9 @@ fun LoginScreen(
                 .padding(start = 20.dp, end = 20.dp)
         ) {
             Button(
-                onClick = {},
+                onClick = {
+                    loginViewModel.login(userInput.text , passwordInput.text)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(70.dp),

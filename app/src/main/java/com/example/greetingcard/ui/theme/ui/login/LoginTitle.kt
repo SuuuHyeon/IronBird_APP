@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.login
+package com.example.greetingcard.ui.theme.ui.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
