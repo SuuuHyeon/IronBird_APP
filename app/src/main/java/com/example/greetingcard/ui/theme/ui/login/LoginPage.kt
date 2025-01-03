@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 @Composable
 fun LoginPage(
@@ -14,8 +15,8 @@ fun LoginPage(
     Column(
     ) {
         LoginTitle()
-        LoginScreen()
-        Button(onClick = { navController.navigate("home")}) {
+        LoginScreen(navController)
+        Button(onClick = { navController.navigate("loginFinder")}) {
             Text("Go to Home");
         }
     }

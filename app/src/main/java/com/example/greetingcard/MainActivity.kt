@@ -15,6 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.greetingcard.ui.theme.GreetingCardTheme
 import com.example.greetingcard.ui.theme.navigation.Screen
+import com.example.greetingcard.ui.theme.ui.login.LoginFinder
+import com.example.greetingcard.ui.theme.ui.login.LoginJoin
 import com.example.greetingcard.ui.theme.ui.login.LoginPage
 
 
@@ -40,9 +42,10 @@ fun GreetingPreview() {
     GreetingCardTheme {
         Column(
             modifier = Modifier.fillMaxWidth()
+
         ) {
-            val navController = rememberNavController()
-            LoginPage(navController = navController)
+            val navController =rememberNavController()
+            LoginJoin(navController = navController)
         }
     }
 }

@@ -5,7 +5,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.greetingcard.ui.theme.ui.login.HomePage
+import com.example.greetingcard.ui.theme.ui.login.LoginFinder
+import com.example.greetingcard.ui.theme.ui.login.LoginJoin
 
 @Composable
 fun SetUpNavGraph(
@@ -13,13 +14,16 @@ fun SetUpNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+        startDestination = Screen.Login.route
     ) {
-        composable(Screen.Splash.route) {
+        composable(Screen.Login.route) {
             LoginPage(navController = navController)
         }
-        composable(Screen.Home.route) {
-            HomePage()
+        composable(Screen.LoginFinder.route) {
+            LoginFinder(navController = navController)
+        }
+        composable(Screen.LoginJoin.route) {
+            LoginJoin(navController = navController)
         }
     }
 }

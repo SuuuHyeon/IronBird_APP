@@ -1,6 +1,7 @@
 package com.example.greetingcard.ui.theme.ui.login
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,11 +39,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.greetingcard.R
 import com.example.greetingcard.ui.theme.restapi.login.LoginViewModel
 
 @Composable
 fun LoginScreen(
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
 
@@ -180,14 +183,23 @@ fun LoginScreen(
                 .padding(top = 30.dp)
                 .padding(start = 20.dp, end = 20.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("회원가입")
+            Text(
+                text = "회원가입",
+                modifier = Modifier.clickable {
+                    navController.navigate("loginJoin")
+                }
+            )
             VerticalDivider(
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.height(25.dp)
             )
-            Text("아이디 찾기")
+            Text(
+                text = "아이디 찾기",
+                modifier = Modifier.clickable {
+                    navController.navigate("loginFInder")
+                })
             VerticalDivider(
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.height(25.dp)
