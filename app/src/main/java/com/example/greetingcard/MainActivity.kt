@@ -24,14 +24,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GreetingCardTheme {
-                val navController =rememberNavController()
+                val navController = rememberNavController()
                 SetUpNavGraph(navController = navController)
-            }
             }
         }
     }
-
-
+}
 
 
 @Preview(showBackground = true)
