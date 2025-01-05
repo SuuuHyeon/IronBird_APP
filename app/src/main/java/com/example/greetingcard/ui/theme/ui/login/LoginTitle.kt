@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun LoginTitle(
+    title: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -23,7 +24,7 @@ fun LoginTitle(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "철새",
+            text = title,
             fontSize = 35.sp,
             fontWeight = FontWeight.Bold)
     }

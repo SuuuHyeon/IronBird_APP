@@ -44,7 +44,7 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxWidth()
 
         ) {
-            val navController =rememberNavController()
+            val navController = rememberNavController()
             LoginJoin(navController = navController)
         }
     }

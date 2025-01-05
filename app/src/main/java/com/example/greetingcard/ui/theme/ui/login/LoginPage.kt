@@ -14,11 +14,8 @@ fun LoginPage(
     navController: NavController) {
     Column(
     ) {
-        LoginTitle()
+        LoginTitle("철새")
         LoginScreen(navController)
-        Button(onClick = { navController.navigate("loginFinder")}) {
-            Text("Go to Home");
-        }
     }
 }
 

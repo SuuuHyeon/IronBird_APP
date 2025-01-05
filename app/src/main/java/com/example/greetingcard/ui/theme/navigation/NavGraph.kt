@@ -19,8 +19,9 @@ fun SetUpNavGraph(
         composable(Screen.Login.route) {
             LoginPage(navController = navController)
         }
-        composable(Screen.LoginFinder.route) {
-            LoginFinder(navController = navController)
+        composable(Screen.LoginFinder.route) { backStackEntry ->
+            val viewType = backStackEntry.arguments?.getString("viewType") ?:  "findId"
+            LoginFinder(navController = navController, viewType = viewType)
         }
         composable(Screen.LoginJoin.route) {
             LoginJoin(navController = navController)

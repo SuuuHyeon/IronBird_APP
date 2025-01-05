@@ -198,13 +198,17 @@ fun LoginScreen(
             Text(
                 text = "아이디 찾기",
                 modifier = Modifier.clickable {
-                    navController.navigate("loginFInder")
+                    navController.navigate("loginFInder/findId")
                 })
             VerticalDivider(
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.height(25.dp)
             )
-            Text("비밀번호 재설정")
+            Text(
+                text = "비밀번호 재설정",
+                modifier = Modifier.clickable {
+                    navController.navigate("loginFinder/findPwd")
+                })
         }
     }
 }
