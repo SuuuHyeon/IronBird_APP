@@ -2,6 +2,8 @@ package com.example.greetingcard.ui.theme.restapi.login
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.create
 
 object LoginClient {
     private final val BASE_URL = "http://10.0.2.2:8080";
@@ -9,6 +11,16 @@ object LoginClient {
     val apiService: LoginService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(LoginService::class.java)
+    }
+
+    val apiSuccessTest: LoginService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(LoginService::class.java)

@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
 import com.example.greetingcard.ui.theme.ui.home.HomePage
 import com.example.greetingcard.ui.theme.ui.home.planning.CreatePlanPage
+import com.example.greetingcard.ui.theme.ui.login.LoginFinder
+import com.example.greetingcard.ui.theme.ui.login.LoginJoin
 
 @Composable
 fun SetUpNavGraph(
@@ -20,18 +22,19 @@ fun SetUpNavGraph(
         composable(Screen.Login.route) {
             LoginPage(navController = navController)
         }
+        composable(Screen.LoginFinder.route) { backStackEntry ->
+            val viewType = backStackEntry.arguments?.getString("viewType") ?: "findId"
+            LoginFinder(navController = navController, viewType = viewType)
+        }
+        composable(Screen.LoginJoin.route) {
+            LoginJoin(navController = navController)
+        }
         composable(Screen.Home.route) {
             val homeViewModel: HomeViewModel = viewModel()
             HomePage(navController = navController, homeViewModel = homeViewModel)
         }
         composable(Screen.CreatePlan.route) {
             CreatePlanPage()
-        composable(Screen.LoginFinder.route) { backStackEntry ->
-            val viewType = backStackEntry.arguments?.getString("viewType") ?:  "findId"
-            LoginFinder(navController = navController, viewType = viewType)
-        }
-        composable(Screen.LoginJoin.route) {
-            LoginJoin(navController = navController)
         }
     }
 }

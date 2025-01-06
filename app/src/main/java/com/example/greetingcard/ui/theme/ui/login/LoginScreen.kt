@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.greetingcard.R
+import com.example.greetingcard.data.dto.UserDTO
 import com.example.greetingcard.ui.theme.restapi.login.LoginViewModel
 
 @Composable
@@ -56,8 +57,8 @@ fun LoginScreen(
     val loginResult = loginViewModel.loginResult.value;
     val errorMessage = loginViewModel.errorMessage.value;
 
-    var userInput by remember { mutableStateOf(TextFieldValue()) }
-    var passwordInput by remember{ mutableStateOf(TextFieldValue()) }
+    var userInput by remember { mutableStateOf("") }
+    var passwordInput by remember{ mutableStateOf("") }
     var shouldShowPwd by remember { mutableStateOf(false) }
     var checkboxStatus by remember {  mutableStateOf(false) }
 
@@ -161,7 +162,7 @@ fun LoginScreen(
         ) {
             Button(
                 onClick = {
-                    loginViewModel.login(userInput.text , passwordInput.text)
+                    loginViewModel.loginTest(UserDTO.from(userInput, passwordInput))
                 },
                 modifier = Modifier
                     .fillMaxWidth()
