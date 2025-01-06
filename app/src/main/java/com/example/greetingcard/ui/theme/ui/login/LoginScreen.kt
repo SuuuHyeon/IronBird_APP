@@ -162,7 +162,7 @@ fun LoginScreen(
         ) {
             Button(
                 onClick = {
-                    loginViewModel.loginTest(UserDTO.from(userInput, passwordInput))
+                    loginViewModel.loginTest(UserDTO.from(userId =  userInput , password = passwordInput))
                 },
                 modifier = Modifier
                     .fillMaxWidth()

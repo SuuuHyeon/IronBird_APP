@@ -6,7 +6,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 
 object LoginClient {
-    private final val BASE_URL = "http://10.0.2.2:8080";
+    private final val BASE_URL = "http://10.0.2.2:8080/api/login";
 
     val apiService: LoginService by lazy {
         Retrofit.Builder()

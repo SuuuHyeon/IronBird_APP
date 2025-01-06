@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,7 +16,9 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -33,8 +36,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.HistoricalChange
 import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.greetingcard.data.dto.UserDTO
+import com.example.greetingcard.ui.theme.restapi.login.LoginViewModel
 
 
 @Composable
@@ -42,6 +49,7 @@ fun LoginJoin(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
+    val loginViewModel : LoginViewModel = viewModel()
     var userId by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf(TextFieldValue()) }
     var userEmail by remember { mutableStateOf(TextFieldValue()) }
@@ -49,7 +57,7 @@ fun LoginJoin(
 
     Column {
         LoginTitle("회원가입")
-        JoinForm(navController)
+        JoinForm(navController, loginViewModel)
     }
 
 }
@@ -57,6 +65,7 @@ fun LoginJoin(
 @Composable
 fun JoinForm(
     navController: NavController,
+    loginViewModel : LoginViewModel,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -69,7 +78,6 @@ fun JoinForm(
         var userName by remember { mutableStateOf("") }
         var userEmail by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
-        var passwordCheck by remember { mutableStateOf(TextFieldValue()) }
 
         Column(
             modifier = modifier
@@ -77,7 +85,6 @@ fun JoinForm(
                 .fillMaxWidth(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
 
         CustomInputField(
             value = userId,
@@ -107,9 +114,26 @@ fun JoinForm(
             placeholderText = "[선택] 이메일주소 (비밀번호 찾기 등 본인 확인용)",
             leadingIcon = Icons.Default.Email
         )
-
     }
+        Button(
+            modifier = modifier
+                .padding(top = 30.dp)
+                .fillMaxWidth()
+                .height(50.dp), // 버튼 크기 조정
+            onClick = {
+                // UserDTO 객체 생성
+                val userDTO = UserDTO.from(userId, userName, password, userEmail)
+                loginViewModel.loginTest(userDTO)
+            },
+            shape = RoundedCornerShape(12.dp), // 둥근 모서리
 
+        ) {
+            Text(
+                text = "회원가입",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
         Button(
             modifier = modifier.padding(top = 30.dp),
             onClick = { navController.navigate("login") }) {
