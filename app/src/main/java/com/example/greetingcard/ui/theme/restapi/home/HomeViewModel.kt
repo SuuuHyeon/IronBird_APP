@@ -19,20 +19,31 @@ class HomeViewModel: ViewModel() {
         selectedTabIndex = index
     }
 
+    // 드롭다운 메뉴 토글
+    fun toggleDropDownMenu() {
+        isDropDownExpanded = !isDropDownExpanded
+    }
 
 
-    // 포스팅
+
+    // 구독한 여행지 목록
     val myTravelList = listOf("제주", "부산", "강릉", "경주", "서울", "대구", "인천", "대전", "광주", "울산", "세종", "제주", "부산", "강릉", "경주", "서울", "대구", "인천", "대전", "광주", "울산", "세종")
+
+    // 선택된 여행지
     var selectedDestination by mutableStateOf<String?>("")
 
+    // 검색 쿼리
+    var searchQuery by mutableStateOf("")
+
+    // 쿼리 변경 메서드
+    fun changeQuery(query: String) {
+        searchQuery = query
+    }
     // 여행지 선택 메서드
     fun selectDestination(destination: String) {
         selectedDestination = destination
     }
 
-    fun toggleDropDownMenu() {
-        isDropDownExpanded = !isDropDownExpanded
-    }
 
 
 }

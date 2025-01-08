@@ -59,18 +59,23 @@ import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
 fun PostingTab(homeViewModel: HomeViewModel) {
     val myTravelList = homeViewModel.myTravelList
     val selectedDestination = homeViewModel.selectedDestination
+    val searchQuery = homeViewModel.searchQuery
 
-    val posts = remember { // 예시 데이터
-        listOf(
-            Post(
-                "Asd",
-                "jaseigc",
-                "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
-                R.drawable.sea
-            ),
-            Post("asd", "jaseigc", "부산 너무 좋아~~~", R.drawable.sea),
+    val posts = List(20) { i ->
+        val captionString = StringBuilder()
+        repeat(i + 1) { // i가 0부터 시작하므로 1을 더해줌
+            captionString.append("예시 게시물")
+        }
+        Post(
+            "userProfile${i + 1}",
+            "userNickName${i + 1}",
+            captionString.toString(),
+            R.drawable.sea
         )
     }
+
+
+
 
     LazyColumn {
         item {
@@ -81,14 +86,16 @@ fun PostingTab(homeViewModel: HomeViewModel) {
             )
         }
         item {
-            Box (
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             ) {
                 SearchBar(
-                    query = "",
-                    onQueryChange = { },
+                    query = searchQuery,
+                    onQueryChange = {
+                        homeViewModel.changeQuery(it)
+                    },
                 )
             }
         }
@@ -242,6 +249,8 @@ fun PostingList(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PostItem(post: Post, onClick: () -> Unit) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -326,13 +335,14 @@ fun PostItem(post: Post, onClick: () -> Unit) {
                 Text(
                     text = post.caption,
                     style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2, // 최대 2줄까지만 표시
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 2,
                     overflow = TextOverflow.Ellipsis, // 넘칠 경우 "..." 처리
                 )
                 Text(
-                    text = "더 보기",
+                    text = if (isExpanded) "접기" else "더보기",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray,
+                    modifier = Modifier.clickable { isExpanded = !isExpanded }
                 )
             }
         }
