@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -33,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,12 +49,13 @@ import com.example.greetingcard.ui.theme.ui.home.posting.PostingTab
 
 @Composable
 fun HomePage(navController: NavHostController, homeViewModel: HomeViewModel = viewModel()) {
+    val listStates = List(homeViewModel.tabs.size) { rememberLazyListState() }
     Scaffold(
         containerColor = Color.White,
 
         // 상단 바
         topBar = {
-            CustomAppBar(homeViewModel, navController)
+            CustomAppBar(homeViewModel, navController, listStates[homeViewModel.selectedTabIndex])
         },
 
         // 플로팅 버튼
@@ -74,9 +77,9 @@ fun HomePage(navController: NavHostController, homeViewModel: HomeViewModel = vi
         ) {
             // selectedTabIndex에 따라 화면 변경
             if (homeViewModel.selectedTabIndex == 0) {
-                PlanningScreen()
+                PlanningScreen(listState = listStates[0])
             } else {
-                PostingTab(homeViewModel = homeViewModel)
+                PostingTab(homeViewModel = homeViewModel, listState = listStates[1])
             }
         }
     }

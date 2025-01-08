@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -32,24 +33,21 @@ import androidx.compose.ui.unit.sp
 
 // 플래닝 화면
 @Composable
-fun PlanningScreen() {
+fun PlanningScreen(listState: LazyListState) {
     LazyColumn(
-        modifier = Modifier
-            .padding(12.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .fillMaxSize()
+        state = listState,
     ) {
+        println("플래닝탭 listState: ${listState.toString()}")
         item {
             SearchBar()
-            Spacer(modifier = Modifier.height(16.dp))
         }
         item {
             FeaturesGrid()
         }
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             AdvertisementSection()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(60.dp))
         }
     }
 }
@@ -67,7 +65,7 @@ fun SearchBar() {
         textStyle = MaterialTheme.typography.bodyMedium,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 22.dp)
+            .padding(horizontal = 35.dp, vertical = 8.dp)
             .height(60.dp)
             .background(Color(0xFFF4F4F4), shape = RoundedCornerShape(20.dp))
             .padding(horizontal = 12.dp),

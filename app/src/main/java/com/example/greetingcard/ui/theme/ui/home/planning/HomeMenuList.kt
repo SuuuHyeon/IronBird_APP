@@ -47,7 +47,7 @@ fun FeaturesGrid() {
             .heightIn(max = 600.dp)
             .wrapContentHeight(),
         userScrollEnabled = false,
-        contentPadding = PaddingValues(4.dp)
+        contentPadding = PaddingValues(horizontal = 25.dp, vertical = 12.dp)
     ) {
         items(features) { (title, description, img) ->
             FeatureCard(title = title, description = description, img = img)
@@ -67,7 +67,7 @@ fun FeatureCard(title: String, description: String, img: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(20.dp))
             .aspectRatio(1f)
 //            .padding(4.dp)
 //            .shadow(2.dp, shape = RoundedCornerShape(20.dp))

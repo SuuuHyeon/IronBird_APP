@@ -23,8 +23,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -56,7 +58,7 @@ import com.example.greetingcard.R
 import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
 
 @Composable
-fun PostingTab(homeViewModel: HomeViewModel) {
+fun PostingTab(homeViewModel: HomeViewModel, listState: LazyListState) {
     val myTravelList = homeViewModel.myTravelList
     val selectedDestination = homeViewModel.selectedDestination
     val searchQuery = homeViewModel.searchQuery
@@ -69,15 +71,22 @@ fun PostingTab(homeViewModel: HomeViewModel) {
         Post(
             "userProfile${i + 1}",
             "userNickName${i + 1}",
+            "강릉",
             captionString.toString(),
             R.drawable.sea
         )
+    }.filter {
+        it.caption.contains(searchQuery) || it.destination.contains(searchQuery)
     }
 
 
 
 
-    LazyColumn {
+
+    LazyColumn(
+        state = listState,
+    ) {
+        println("포스팅 탭 listState: ${listState.toString()}")
         item {
             TravelDestinationSelector(
                 destinations = myTravelList,
@@ -205,47 +214,6 @@ fun SearchBar(
     )
 }
 
-
-@Composable
-fun PostingList(
-    posts: List<Post>, // 포스팅 데이터 모델 리스트
-    onClickPost: (Post) -> Unit // 포스트 클릭 이벤트
-) {
-
-    var searchQuery by remember { mutableStateOf("") }
-    val posts = remember { // 예시 데이터
-        val filteredPosts = posts.filter {
-            it.caption.contains(searchQuery)
-        }
-        listOf(
-            Post(
-                "Asd",
-                "jaseigc",
-                "가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하",
-                R.drawable.sea
-            ),
-            Post("asd", "jaseigc", "부산 너무 좋아~~~", R.drawable.sea),
-        )
-    }
-
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(vertical = 8.dp)
-    ) {
-        item {
-            SearchBar(
-                query = searchQuery,
-                onQueryChange = { searchQuery = it }
-            )
-        }
-        items(posts) { post ->
-            PostItem(post = post, onClick = { onClickPost(post) })
-        }
-    }
-}
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun PostItem(post: Post, onClick: () -> Unit) {
@@ -355,6 +323,7 @@ fun PostItem(post: Post, onClick: () -> Unit) {
 data class Post(
     val userProfileImgUrl: String,
     val userNickName: String,
+    val destination: String,
     val caption: String,
     val imageResId: Int, // 이미지 리소스 ID
     val postImgList: List<String>? = null // 여행지
