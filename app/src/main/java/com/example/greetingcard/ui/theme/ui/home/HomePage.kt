@@ -57,8 +57,12 @@ fun HomePage(navController: NavHostController, homeViewModel: HomeViewModel = vi
 
         // 플로팅 버튼
         floatingActionButton = {
-            CreatePlanFloatingButton {
-                navController.navigate("create_plan")
+            // 플래닝 탭에서만 보이도록 설정
+            // TODO: 추후 포스팅 탭에서 가장 가까운 여행 일정 페이지로 이동하는 플로팅 버튼 생성 예정
+            if (homeViewModel.selectedTabIndex == 0) {
+                CreatePlanFloatingButton {
+                    navController.navigate("create_plan")
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -72,7 +76,7 @@ fun HomePage(navController: NavHostController, homeViewModel: HomeViewModel = vi
             if (homeViewModel.selectedTabIndex == 0) {
                 PlanningScreen()
             } else {
-                PostingTab()
+                PostingTab(homeViewModel = homeViewModel)
             }
         }
     }

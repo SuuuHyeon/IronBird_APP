@@ -61,6 +61,7 @@ fun SearchBar() {
         mutableStateOf("")
     }
     BasicTextField(
+
         value = text,
         onValueChange = { text = it },
         textStyle = MaterialTheme.typography.bodyMedium,

@@ -162,7 +162,8 @@ fun LoginScreen(
         ) {
             Button(
                 onClick = {
-                    loginViewModel.loginTest(UserDTO.from(userId =  userInput , password = passwordInput))
+//                    loginViewModel.loginTest(UserDTO.from(userId =  userInput , password = passwordInput))
+                    navController.navigate("home")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
