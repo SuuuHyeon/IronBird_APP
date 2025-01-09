@@ -1,6 +1,5 @@
 package com.example.greetingcard.ui.theme.ui.login.component
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,14 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -35,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -43,10 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.greetingcard.R
-import com.example.greetingcard.data.model.dto.user.UserDTO
-import com.example.greetingcard.ui.theme.ui.login.view.CustomInputField
-import com.example.greetingcard.ui.theme.ui.login.view.CustomPwd
 import com.example.greetingcard.viewModel.login.LoginViewModel
 
 @Composable
@@ -56,14 +46,14 @@ fun Login(
 ) {
     val loginViewModel: LoginViewModel = viewModel()
 
-    val isLoading = loginViewModel.isLoading.value;
-    val loginResult = loginViewModel.loginResult.value;
-    val errorMessage = loginViewModel.errorMessage.value;
+    loginViewModel.isLoading.value
+    loginViewModel.loginResult.value
+    loginViewModel.errorMessage.value
 
     var userInput by remember { mutableStateOf("") }
-    var passwordInput by remember{ mutableStateOf("") }
+    var passwordInput by remember { mutableStateOf("") }
     var shouldShowPwd by remember { mutableStateOf(false) }
-    var checkboxStatus by remember {  mutableStateOf(false) }
+    var checkboxStatus by remember { mutableStateOf(false) }
 
     val paddingModifier = Modifier
         .fillMaxWidth()
@@ -74,7 +64,7 @@ fun Login(
         unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
     )
 
-    val loginButtonColor =  ButtonDefaults.buttonColors(Color(0xFF87CEEB))
+    ButtonDefaults.buttonColors(Color(0xFF87CEEB))
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -86,19 +76,20 @@ fun Login(
             userInput = userInput,
             passwordInput = passwordInput,
             shouldShowPwd = shouldShowPwd,
-            onUserInputChange = { userInput = it},
-            onPasswordInputChange = { passwordInput = it},
-            onPasswordVisibilityToggle = { shouldShowPwd = !shouldShowPwd},
+            onUserInputChange = { userInput = it },
+            onPasswordInputChange = { passwordInput = it },
+            onPasswordVisibilityToggle = { shouldShowPwd = !shouldShowPwd },
             textFieldColors = textFieldColors,
             paddingModifier = paddingModifier
         )
 
         LoginCheckBox(
             checkboxStatus,
-            onCheckedValue = {checkboxStatus = it}
+            onCheckedValue = { checkboxStatus = it }
         )
 
         LoginButtonContainer(
+            navController = navController,
             userInput = userInput,
             passwordInput = passwordInput
         )
@@ -161,9 +152,12 @@ fun LoginForm(
 @Composable
 fun LoginCheckBox(
     checkboxStatus: Boolean,
-    onCheckedValue: (Boolean) -> Unit) {
+    onCheckedValue: (Boolean) -> Unit
+) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(10.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(
@@ -187,7 +181,7 @@ fun LoginCheckBox(
 
 @Composable
 fun LoginActionRow(
-    navController : NavController
+    navController: NavController
 ) {
     Row(
         modifier = Modifier

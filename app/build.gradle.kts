@@ -1,6 +1,4 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.jetbrains.kotlin.gradle.utils.loadPropertyFromResources
-import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -23,7 +21,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders["KAKAO_NATIVE_KEY"] = getLocalProperties("KAKAO_NATIVE_KEY")
-
 
 
     }
@@ -95,7 +92,6 @@ dependencies {
     implementation("com.kakao.sdk:v2-friend:2.20.1") // 피커 API 모듈
     implementation("com.kakao.sdk:v2-navi:2.20.1") // 카카오내비 API 모듈
     implementation("com.kakao.sdk:v2-cert:2.20.1") // 카카오톡 인증 서비스 API 모듈
-
 
 }
 

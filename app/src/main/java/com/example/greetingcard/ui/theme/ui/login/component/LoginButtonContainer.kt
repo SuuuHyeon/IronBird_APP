@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.greetingcard.data.model.dto.user.UserDTO
 import com.example.greetingcard.viewModel.login.LoginViewModel
 import com.example.greetingcard.viewModel.login.kakao.KakaoViewModel
@@ -21,6 +22,7 @@ import com.example.greetingcard.viewModel.login.kakao.KakaoViewModel
 
 @Composable
 fun LoginButtonContainer(
+    navController: NavController,
     userInput: String,
     passwordInput: String
 ) {
@@ -40,7 +42,10 @@ fun LoginButtonContainer(
             passwordInput = passwordInput,
         )
 
-        KakaoButton(kakaoViewModel = kakaoViewModel)
+        KakaoButton(
+            kakaoViewModel = kakaoViewModel,
+            navController = navController
+        )
 
         Test()
 
@@ -82,11 +87,14 @@ fun LoginButton(
 
 @Composable
 fun KakaoButton(
-    kakaoViewModel: KakaoViewModel
+    kakaoViewModel: KakaoViewModel,
+    navController: NavController
+
 ) {
+    kakaoViewModel.loginResult
     Button(
         onClick = {
-            kakaoViewModel.handleKakaoLogin()
+            kakaoViewModel.handleKakaoLogin(navController = navController)
         }, modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
@@ -107,11 +115,12 @@ fun KakaoButton(
 
 @Composable
 fun NaverButton(
-    viewModel: KakaoViewModel
+    viewModel: KakaoViewModel,
+    navController: NavController
 ) {
     Column {
         Button(onClick = {
-            viewModel.handleKakaoLogin()
+            viewModel.handleKakaoLogin(navController = navController)
         }) {
             Text("카카오 로그인 하기")
         }
