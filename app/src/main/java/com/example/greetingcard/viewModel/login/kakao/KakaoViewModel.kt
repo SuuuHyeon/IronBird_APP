@@ -9,7 +9,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 
-class KakaoAuthViewModel(application: Application): AndroidViewModel(application) {
+class KakaoViewModel(application: Application): AndroidViewModel(application) {
 
     companion object {
         const val TAG = "KakaoAuthViewModel"

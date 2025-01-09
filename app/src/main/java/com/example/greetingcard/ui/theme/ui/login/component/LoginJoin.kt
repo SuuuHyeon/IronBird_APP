@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.ui.login
+package com.example.greetingcard.ui.theme.ui.login.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.greetingcard.data.model.dto.user.UserDTO
+import com.example.greetingcard.ui.theme.ui.login.view.CustomInputField
 import com.example.greetingcard.viewModel.login.LoginViewModel
 
 
@@ -79,27 +80,27 @@ fun JoinForm(
             leadingIcon = Icons.Default.Person
         )
 
-        CustomInputField(
-            value = password,
-            onValueChange = { password = it },
-            placeholderText = "비밀번호",
-            leadingIcon = Icons.Default.Lock,
-            trailingIcon = Icons.Default.Check
-        )
+            CustomInputField(
+                value = password,
+                onValueChange = { password = it },
+                placeholderText = "비밀번호",
+                leadingIcon = Icons.Default.Lock,
+                trailingIcon = Icons.Default.Check
+            )
 
-        CustomInputField(
-            value = userName,
-            onValueChange = { userName = it },
-            placeholderText = "이름",
-            leadingIcon = Icons.Default.Person
-        )
+            CustomInputField(
+                value = userName,
+                onValueChange = { userName = it },
+                placeholderText = "이름",
+                leadingIcon = Icons.Default.Person
+            )
 
-        CustomInputField(
-            value = userEmail,
-            onValueChange = { userEmail = it },
-            placeholderText = "[선택] 이메일주소 (비밀번호 찾기 등 본인 확인용)",
-            leadingIcon = Icons.Default.Email
-        )
+            CustomInputField(
+                value = userEmail,
+                onValueChange = { userEmail = it },
+                placeholderText = "[선택] 이메일주소 (비밀번호 찾기 등 본인 확인용)",
+                leadingIcon = Icons.Default.Email
+            )
     }
         Button(
             modifier = modifier

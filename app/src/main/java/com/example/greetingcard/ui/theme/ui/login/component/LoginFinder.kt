@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.ui.login
+package com.example.greetingcard.ui.theme.ui.login.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +16,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.greetingcard.ui.theme.ui.login.view.CustomInputField
+
 @Composable
 fun LoginFinder(
     modifier: Modifier = Modifier,

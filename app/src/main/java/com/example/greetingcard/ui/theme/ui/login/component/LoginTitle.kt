@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.ui.login
+package com.example.greetingcard.ui.theme.ui.login.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +20,7 @@ fun LoginTitle(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 120.dp),
+            .padding(top = 120.dp, bottom = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
