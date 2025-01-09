@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,18 +35,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.greetingcard.R
-import com.example.greetingcard.data.dto.UserDTO
-import com.example.greetingcard.ui.theme.restapi.login.LoginViewModel
+import com.example.greetingcard.data.model.dto.user.UserDTO
+import com.example.greetingcard.viewModel.login.LoginViewModel
+import org.apache.commons.lang3.ObjectUtils.Null
 
 @Composable
-fun LoginScreen(
+fun Login(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -61,7 +62,6 @@ fun LoginScreen(
     var passwordInput by remember{ mutableStateOf("") }
     var shouldShowPwd by remember { mutableStateOf(false) }
     var checkboxStatus by remember {  mutableStateOf(false) }
-
 
 
     val paddingModifier = Modifier
@@ -88,6 +88,16 @@ fun LoginScreen(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
+        CustomInputField(
+            value = userInput,
+            onValueChange = { userInput = it },
+            placeholderText =
+                    "이메일 또는 아이디",
+            leadingIcon = null,  // 적절한 아이콘 설정
+            trailingIcon = null,  // 필요 시 설정, 없으면 null 가능
+            modifier = Modifier.padding(top = 30.dp)
+        )
+
         OutlinedTextField(
             value = userInput,
             onValueChange = { userInput = it },

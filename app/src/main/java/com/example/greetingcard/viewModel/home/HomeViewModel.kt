@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.restapi.home
+package com.example.greetingcard.viewModel.home
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf

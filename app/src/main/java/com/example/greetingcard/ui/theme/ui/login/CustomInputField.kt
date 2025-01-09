@@ -18,7 +18,7 @@ fun CustomInputField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholderText: String,
-    leadingIcon: ImageVector,
+    leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     modifier: Modifier = Modifier
 ) {
@@ -29,11 +29,13 @@ fun CustomInputField(
             text = placeholderText,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis) },
-        leadingIcon = {
-            Icon(
-                imageVector = leadingIcon,
-                contentDescription = null
-            )
+        leadingIcon = leadingIcon?.let {
+            {
+                Icon(
+                    imageVector = leadingIcon,
+                    contentDescription = null
+                )
+            }
         },
         trailingIcon = trailingIcon?.let {
             {

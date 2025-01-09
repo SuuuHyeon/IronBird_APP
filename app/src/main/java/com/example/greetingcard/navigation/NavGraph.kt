@@ -1,11 +1,11 @@
-import com.example.greetingcard.ui.theme.navigation.Screen
 import com.example.greetingcard.ui.theme.ui.login.LoginPage
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
+import com.example.greetingcard.navigation.Screen
+import com.example.greetingcard.viewModel.home.HomeViewModel
 import com.example.greetingcard.ui.theme.ui.home.HomePage
 import com.example.greetingcard.ui.theme.ui.home.planning.CreatePlanPage
 import com.example.greetingcard.ui.theme.ui.login.LoginFinder

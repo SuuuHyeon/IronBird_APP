@@ -15,7 +15,7 @@ fun LoginPage(
     Column(
     ) {
         LoginTitle("철새")
-        LoginScreen(navController)
+        Login(navController)
     }
 }
 

@@ -1,10 +1,11 @@
-package com.example.greetingcard.ui.theme.restapi.login
+package com.example.greetingcard.viewModel.login
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.greetingcard.data.dto.UserDTO
+import com.example.greetingcard.data.model.dto.user.UserDTO
+import com.example.greetingcard.data.client.login.LoginClient
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {

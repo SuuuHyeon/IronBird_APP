@@ -1,4 +1,4 @@
-package com.example.greetingcard.data.dto
+package com.example.greetingcard.data.model.dto.user
 
 data class UserDTO(
     private val userId: String,
