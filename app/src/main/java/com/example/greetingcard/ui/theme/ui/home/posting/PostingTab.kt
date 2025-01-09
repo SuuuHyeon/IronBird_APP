@@ -16,8 +16,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,48 +30,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
 
-// 더미 데이터 모델
-data class Post(
-    val userProfileImgUrl: String?, // 유저 프로필 이미지 URL
-    val userNickName: String, // 유저 닉네임
-    val destination: String, // 여행지
-    val caption: String, // 게시물 내용
-    val postImgUrl: String?, // 게시물 이미지 URL
-//    val postImgList: List<String>? = null // 여행지
-)
+
 
 
 // 포스팅 탭
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostingTab(homeViewModel: HomeViewModel, listState: LazyListState) {
     val myTravelList = homeViewModel.myTravelList
     val selectedDestination = homeViewModel.selectedDestination
     val searchQuery = homeViewModel.searchQuery
 
-    // 게시물 더미 데이터
-    val posts = List(20) { i ->
-        val captionString = StringBuilder()
-        repeat(i + 1) { // i가 0부터 시작하므로 1을 더해줌
-            captionString.append("예시 게시물")
-        }
-        Post(
-            if (i % 2 == 0) {
-                "https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202208/11/e4727123-666e-4603-a2fa-b2478b3130bd.jpg"
-            } else {
-                null
-            },
-            "userNickName${i + 1}",
-            "강릉",
-            captionString.toString(),
-            if (i % 2 == 0) {
-                "https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202208/11/e4727123-666e-4603-a2fa-b2478b3130bd.jpg"
-            } else {
-                null
-            }
-        )
-    }.filter {
-        it.caption.contains(searchQuery) || it.destination.contains(searchQuery)
-    }
+
 
 
     LazyColumn(
@@ -97,8 +69,7 @@ fun PostingTab(homeViewModel: HomeViewModel, listState: LazyListState) {
                 )
             }
         }
-        // TODO: 포스팅 필터링 기능 추가
-        items(posts) { post ->
+        items(homeViewModel.filteredPostList) { post ->
             PostItem(
                 post = post,
                 onClickUserProfile = {},

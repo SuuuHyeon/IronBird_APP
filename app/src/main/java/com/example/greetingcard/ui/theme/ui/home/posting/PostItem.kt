@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.greetingcard.R
+import com.example.greetingcard.ui.theme.restapi.home.Post
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -86,8 +87,8 @@ fun PostItem(
             ) {
                 Icon(
                     imageVector = Icons.Default.ChatBubbleOutline,
+                    contentDescription = "댓글 아이콘",
                     modifier = Modifier.size(25.dp),
-                    contentDescription = "좋아요 아이콘"
                 )
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(text = "13", style = MaterialTheme.typography.bodyLarge)

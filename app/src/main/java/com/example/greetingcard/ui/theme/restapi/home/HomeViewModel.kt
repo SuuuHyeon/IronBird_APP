@@ -35,15 +35,55 @@ class HomeViewModel: ViewModel() {
     // 검색 쿼리
     var searchQuery by mutableStateOf("")
 
-    // 쿼리 변경 메서드
+    // 쿼리 변경 메서드(임시 검색)
     fun changeQuery(query: String) {
         searchQuery = query
+
+        filteredPostList = allPostList.filter {
+            it.caption.contains(searchQuery) ||
+            it.destination.contains(searchQuery)
+        }
     }
     // 여행지 선택 메서드
     fun selectDestination(destination: String) {
         selectedDestination = destination
     }
 
+    // 게시물 더미 데이터
+    val allPostList = List(20) { i ->
+        val captionString = StringBuilder()
+        repeat(i + 1) { // i가 0부터 시작하므로 1을 더해줌
+            captionString.append("예시 게시물")
+        }
+        Post(
+            if (i % 2 == 0) {
+                "https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202208/11/e4727123-666e-4603-a2fa-b2478b3130bd.jpg"
+            } else {
+                null
+            },
+            "userNickName${i + 1}",
+            "강릉",
+            captionString.toString(),
+            if (i % 2 == 0) {
+                "https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202208/11/e4727123-666e-4603-a2fa-b2478b3130bd.jpg"
+            } else {
+                null
+            }
+        )
+    }
+    var filteredPostList by mutableStateOf(allPostList) // 필터링된 리스트
 
 
 }
+
+
+// 더미 데이터 모델
+data class Post(
+    val userProfileImgUrl: String?, // 유저 프로필 이미지 URL
+    val userNickName: String, // 유저 닉네임
+    val destination: String, // 여행지
+    val caption: String, // 게시물 내용
+    val postImgUrl: String?, // 게시물 이미지 URL
+//    val postImgList: List<String>? = null // 여행지
+)
+
