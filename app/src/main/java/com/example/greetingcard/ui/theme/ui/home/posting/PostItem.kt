@@ -18,15 +18,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,31 +46,69 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.greetingcard.R
+import com.example.greetingcard.ui.theme.restapi.home.Comment
 import com.example.greetingcard.ui.theme.restapi.home.Post
+import java.util.Date
 
-@OptIn(ExperimentalLayoutApi::class)
+fun calculateElapsedTime(startDate: Date): String {
+    val now = Date()
+    val diffMillis = now.time - startDate.time
+
+    val seconds = diffMillis / 1000
+    val minutes = seconds / 60
+    val hours = minutes / 60
+    val days = hours / 24
+    val weeks = days / 7
+    val months = days / 30
+    val years = days / 365
+
+    return when {
+        years > 0 -> "${years}년"
+        months > 0 -> "${months}달"
+        weeks > 0 -> "${weeks}주"
+        days > 0 -> "${days}일"
+        hours > 0 -> "${hours}시간"
+        minutes > 0 -> "${minutes}분"
+        else -> "방금"
+    }
+}
+
+
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun PostItem(
+    commentList: List<Comment>,
     post: Post,
     onClickUserProfile: () -> Unit,
     onClickLikeIcon: () -> Unit,
     onClickBubbleIcon: () -> Unit,
 ) {
+    // 캡션 펼침 여부
     var isExpanded by remember { mutableStateOf(false) }
+    // 바텀시트 표시 여부
+    var showBottomSheet by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
+    val elapsedTime = calculateElapsedTime(post.postUploadDate)
+    Column {
         // 유저 프로필 섹션
-        ProfileSection(post.userNickName, post.userProfileImgUrl, onClickUserProfile)
+        ProfileSection(
+            post.userNickName,
+            post.userProfileImgUrl,
+            onClickUserProfile,
+            elapsedTime
+        )
+
         // 이미지 섹션
-        PostImgSection(post.postImgUrl, onClickPostImg = { Log.d("PostItem", "게시물 이미지 클릭") })
+        PostImgSection(post.postImgUrlList, onClickPostImg = { Log.d("PostItem", "게시물 이미지 클릭") })
         Spacer(modifier = Modifier.height(4.dp))
 
         // 좋아요, 댓글 섹션
@@ -82,7 +130,11 @@ fun PostItem(
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(text = "120", style = MaterialTheme.typography.bodyLarge)
             }
+            if (showBottomSheet) {
+                CommentListBottomSheet(commentList, onDismissRequest = { showBottomSheet = false })
+            }
             Row(
+                modifier = Modifier.clickable { showBottomSheet = true },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -135,7 +187,8 @@ fun PostItem(
 fun ProfileSection(
     userNickName: String,
     userProfileImgUrl: String?,
-    onClickUserProfile: () -> Unit
+    onClickUserProfile: () -> Unit,
+    postUploadDate: String,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -159,40 +212,178 @@ fun ProfileSection(
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
         )
+        Spacer(modifier = Modifier.width(3.dp))
+        Text(
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(color = Color.LightGray)) {
+                    append("⦁ ")
+                }
+                append(postUploadDate)
+            },
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Gray,
+        )
     }
 }
 
 // 게시물 이미지 섹션
 @Composable
-fun PostImgSection(postImgUrl: String?, onClickPostImg: () -> Unit) {
-    var isError by remember { mutableStateOf(false) }
+fun PostImgSection(postImgUrl: List<String?>?, onClickPostImg: () -> Unit) {
+    // 각 페이지별 이미지 로딩 실패 여부
+    val errorStates = remember {
+        mutableStateListOf<Boolean>().apply {
+            repeat(postImgUrl?.size ?: 0) { add(false) }
+        }
+    }
 
+    val pagerState = rememberPagerState(pageCount = { postImgUrl?.size ?: 0 })
 
-    if (isError) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(1.2f)
-                .background(Color.LightGray)
-                .clickable { onClickPostImg() },
-        ) {
-            Image(
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxSize()
+    ) { page ->
+        if (errorStates[page]) {
+            // 에러가 발생한 경우
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .size(40.dp),
-                painter = painterResource(R.drawable.refresh_icon),
-                contentDescription = "로딩 실패 아이콘",
+                    .fillMaxSize()
+                    .aspectRatio(1.2f)
+                    .background(Color.LightGray)
+                    .clickable { onClickPostImg() },
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(40.dp),
+                    painter = painterResource(R.drawable.refresh_icon),
+                    contentDescription = "로딩 실패 아이콘",
+                )
+            }
+        } else {
+            // 정상적인 이미지 로딩
+            AsyncImage(
+                model = postImgUrl?.get(page),
+                onError = { errorStates[page] = true }, // 해당 페이지의 상태만 변경
+                onSuccess = { errorStates[page] = false }, // 성공 시 에러 상태 초기화
+                contentDescription = "게시물 사진",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1.2f),
+                contentScale = ContentScale.FillBounds
             )
         }
-    } else {
-        AsyncImage(
-            model = postImgUrl,
-            onError = { isError = true },
-            contentDescription = "게시물 사진",
+    }
+
+    Row(
+        Modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(bottom = 8.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        repeat(pagerState.pageCount) { iteration ->
+            val color =
+                if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+            Box(
+                modifier = Modifier
+                    .padding(3.dp)
+                    .clip(CircleShape)
+                    .background(color)
+                    .size(8.dp)
+            )
+        }
+    }
+}
+
+
+// 댓글 리스트 바텀시트
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Composable
+fun CommentListBottomSheet(
+    commentList: List<Comment>,
+    onDismissRequest: () -> Unit,
+) {
+    val sheetState = rememberModalBottomSheetState()
+
+    ModalBottomSheet(
+        dragHandle = { CommentBottomSheetDragHandle() },
+        containerColor = Color.White,
+        onDismissRequest = { onDismissRequest() },
+        sheetState = sheetState,
+        content = {
+            // 스크롤 가능한 리스트
+            LazyColumn(
+                modifier = Modifier
+                    .padding(vertical = 12.dp),
+            ) {
+                items(commentList) { comment ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                    ) {
+                        AsyncImage(
+                            model = comment.userProfileImgUrl,
+                            error = painterResource(R.drawable.user_profile),
+                            contentDescription = "유저 프로필 이미지",
+                            modifier = Modifier
+                                .padding(top = 4.dp)
+                                .size(35.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Text(
+                                text = comment.userNickName,
+                                fontSize = 14.sp,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            Text(
+                                text = comment.comment,
+                                overflow = TextOverflow.Ellipsis,
+                                fontSize = 15.sp,
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+            }
+        },
+    )
+}
+
+// 댓글 바텀시트 드래그 핸들
+@Composable
+fun CommentBottomSheetDragHandle() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+    ) {
+        HorizontalDivider(
+            modifier = Modifier
+                .width(45.dp)
+                .padding(top = 12.dp, bottom = 8.dp)
+                .clip(CircleShape),
+            color = Color.LightGray,
+            thickness = 5.dp,
+        )
+        Text(
+            text = "댓글",
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(1.2f),
-            contentScale = ContentScale.FillBounds
+                .clip(CircleShape),
+            color = Color.LightGray,
+            thickness = 0.5.dp,
         )
     }
 }

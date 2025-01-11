@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,8 +30,6 @@ import androidx.compose.ui.unit.sp
 import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
 
 
-
-
 // 포스팅 탭
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,12 +39,10 @@ fun PostingTab(homeViewModel: HomeViewModel, listState: LazyListState) {
     val searchQuery = homeViewModel.searchQuery
 
 
-
-
     LazyColumn(
         state = listState,
     ) {
-        println("포스팅 탭 listState: ${listState.toString()}")
+        println("포스팅 탭 listState: $listState")
         item {
             MyTravelList(
                 destinations = myTravelList,
@@ -75,6 +70,7 @@ fun PostingTab(homeViewModel: HomeViewModel, listState: LazyListState) {
                 onClickUserProfile = {},
                 onClickLikeIcon = {},
                 onClickBubbleIcon = {},
+                commentList = homeViewModel.commentList,
             )
         }
     }
