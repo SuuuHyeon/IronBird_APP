@@ -1,9 +1,9 @@
-package com.example.greetingcard.ui.theme.restapi.login
+package com.example.greetingcard.data.client.login
 
+import com.example.greetingcard.data.service.login.LoginService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.create
 
 object LoginClient {
     private final val BASE_URL = "http://10.0.2.2:8080/api/login";
@@ -25,4 +25,5 @@ object LoginClient {
             .build()
             .create(LoginService::class.java)
     }
+
 }

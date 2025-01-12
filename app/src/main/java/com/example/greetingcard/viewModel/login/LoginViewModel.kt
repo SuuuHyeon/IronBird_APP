@@ -1,10 +1,11 @@
-package com.example.greetingcard.ui.theme.restapi.login
+package com.example.greetingcard.viewModel.login
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.greetingcard.data.dto.UserDTO
+import com.example.greetingcard.data.client.login.LoginClient
+import com.example.greetingcard.data.model.dto.user.UserDTO
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
@@ -34,7 +35,7 @@ class LoginViewModel : ViewModel() {
     }
 
     fun loginTest(userDTO: UserDTO) {
-        Log.d("userName" , userDTO.toString())
+        Log.d("userName", userDTO.toString())
         isLoading.value = true
         viewModelScope.launch {
             try {
@@ -64,7 +65,6 @@ class LoginViewModel : ViewModel() {
             }
         }
     }
-
 
 
 }

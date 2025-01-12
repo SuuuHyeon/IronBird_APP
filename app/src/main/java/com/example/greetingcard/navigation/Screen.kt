@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.navigation
+package com.example.greetingcard.navigation
 
 sealed class Screen(val route: String) {
     object Login : Screen(route = "login")

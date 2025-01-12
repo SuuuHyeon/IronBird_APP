@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
+import com.example.greetingcard.viewModel.home.HomeViewModel
 import com.example.greetingcard.ui.theme.ui.home.planning.PlanningScreen
 import com.example.greetingcard.ui.theme.ui.home.posting.PostingTab
 
