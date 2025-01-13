@@ -22,8 +22,8 @@ fun AdvertisementSection() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 3.dp)
-            .height(180.dp)
+            .padding(horizontal = 25.dp)
+            .height(200.dp)
             .background(Color(0xFFF0975B), shape = RoundedCornerShape(20.dp))
     ) {
         Text(
