@@ -55,8 +55,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.greetingcard.R
-import com.example.greetingcard.ui.theme.restapi.home.Comment
-import com.example.greetingcard.ui.theme.restapi.home.Post
+import com.example.greetingcard.viewModel.home.Comment
+import com.example.greetingcard.viewModel.home.Post
 import java.util.Date
 
 fun calculateElapsedTime(startDate: Date): String {

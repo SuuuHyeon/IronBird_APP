@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.greetingcard.ui.theme.restapi.home.HomeViewModel
+import com.example.greetingcard.viewModel.home.HomeViewModel
 
 
 // 포스팅 탭
