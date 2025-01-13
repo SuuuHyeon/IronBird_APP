@@ -34,6 +34,9 @@ class LoginViewModel : ViewModel() {
         }
     }
 
+    fun join(userDTO: UserDTO) {
+    }
+
     fun loginTest(userDTO: UserDTO) {
         Log.d("userName", userDTO.toString())
         isLoading.value = true
