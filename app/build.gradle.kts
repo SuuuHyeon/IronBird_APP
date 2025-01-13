@@ -6,11 +6,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
-
 android {
     namespace = "com.example.greetingcard"
     compileSdk = 35
-
 
     defaultConfig {
         applicationId = "com.example.greetingcard"
@@ -22,10 +20,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders["KAKAO_NATIVE_KEY"] = getLocalProperties("KAKAO_NATIVE_KEY")
 
-
     }
 
     buildTypes {
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -84,6 +82,13 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
+    // Material Icons
+    implementation ("androidx.compose.material:material-icons-extended:1.7.6")
+
+    // Coil
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+
     // kakao Oauth
     implementation("com.kakao.sdk:v2-all:2.20.1") // 전체 모듈 설치, 2.11.0 버전부터 지원
     implementation("com.kakao.sdk:v2-user:2.20.6")
@@ -93,6 +98,5 @@ dependencies {
     implementation("com.kakao.sdk:v2-navi:2.20.1") // 카카오내비 API 모듈
     implementation("com.kakao.sdk:v2-cert:2.20.1") // 카카오톡 인증 서비스 API 모듈
 
+
 }
-
-

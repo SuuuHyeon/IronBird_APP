@@ -47,14 +47,35 @@ fun LoginButtonContainer(
             navController = navController
         )
 
-        Test()
+        Test(
+            onClick = {
+                navController.navigate("home")
+            }
+        )
 
     }
 }
 
 @Composable
-fun Test() {
-
+fun Test(
+    onClick: () -> Unit
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp)
+            .padding(top = 10.dp)
+            .padding(start = 20.dp, end = 20.dp),
+        colors = ButtonDefaults.buttonColors(Color.Black),
+        shape = RoundedCornerShape(15.dp),
+        onClick = { onClick() }
+    ) {
+        Text(
+            text = "홈으로 이동(임시)",
+            fontSize = 20.sp,
+            color = Color.White
+        )
+    }
 }
 
 @Composable
