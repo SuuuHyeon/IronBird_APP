@@ -54,7 +54,6 @@ fun Login(
     var passwordInput by remember { mutableStateOf("") }
     var shouldShowPwd by remember { mutableStateOf(false) }
     var checkboxStatus by remember { mutableStateOf(false) }
-
     val paddingModifier = Modifier
         .fillMaxWidth()
         .padding(start = 20.dp, end = 20.dp)

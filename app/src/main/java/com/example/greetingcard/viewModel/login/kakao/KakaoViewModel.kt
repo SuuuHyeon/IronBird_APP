@@ -26,27 +26,34 @@ class KakaoViewModel(
     private val _loginResult = MutableLiveData<Result<String>>()
     val loginResult: LiveData<Result<String>> get() = _loginResult
 
+    var loginSuccess = false
+
+    // 해당 id가존재하지 않을경우 회원가입창으로 이동
+    // 해당 id가 존재할경우 환영합니다 ""님하고 create_plan 창으로 이동
+
     fun handleKakaoLogin(
         navController: NavController
-    ) {
-
-
+    ): Boolean {
         if (AuthApiClient.instance.hasToken()) {
             UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
                 if (error != null) {
                     if (error is KakaoSdkError && error.isInvalidTokenError() == true) {
                         loginWithKakao()
+                        loginSuccess = true
                     } else {
                         _loginResult.postValue(Result.failure(error))
                     }
                 } else {
                     getUserInfo()
-                    navController.navigate("create_plan")
+                    loginSuccess = true
+//                    navController.navigate("create_plan")
                 }
             }
         } else {
             loginWithKakao()
+            loginSuccess = true
         }
+        return loginSuccess
     }
 
     fun loginWithKakao() {
@@ -83,5 +90,7 @@ class KakaoViewModel(
             }
         }
     }
+
 }
+
 

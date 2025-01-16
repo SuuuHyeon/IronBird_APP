@@ -1,5 +1,6 @@
 package com.example.greetingcard.ui.theme.ui.login.component
 
+import CustomAlertDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -9,6 +10,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -25,11 +30,13 @@ fun LoginButtonContainer(
     navController: NavController,
     userInput: String,
     passwordInput: String
+
 ) {
     val loginViewModel: LoginViewModel = viewModel()
     val kakaoViewModel: KakaoViewModel = viewModel()
 
-//    val loginButtonColor = ButtonDefaults.buttonColors(Color(0xFF87CEEB))
+//    val loginButtonColor = ButtonDefaults.buttonColors(Col
+//    or(0xFF87CEEB))
 
     Column(
         modifier = Modifier
@@ -44,7 +51,7 @@ fun LoginButtonContainer(
 
         KakaoButton(
             kakaoViewModel = kakaoViewModel,
-            navController = navController
+            navController = navController,
         )
 
         Test(
@@ -110,29 +117,36 @@ fun LoginButton(
 fun KakaoButton(
     kakaoViewModel: KakaoViewModel,
     navController: NavController
-
 ) {
-    kakaoViewModel.loginResult
+    var loginSuccess by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+
+
     Button(
         onClick = {
-            kakaoViewModel.handleKakaoLogin(navController = navController)
-        }, modifier = Modifier
+            loginSuccess = kakaoViewModel.handleKakaoLogin(navController = navController)
+            if (loginSuccess) {
+                showDialog = true
+            }
+        },
+        modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
             .padding(top = 10.dp)
             .padding(start = 20.dp, end = 20.dp),
         colors = ButtonDefaults.buttonColors(Color(0xFFFEE500)),
         shape = RoundedCornerShape(15.dp)
-    )
-    {
+    ) {
         Text(
             text = "카카오 로그인 하기",
             fontSize = 20.sp,
             color = Color.Black
         )
     }
-}
 
+    // 로그인 성공 시 다이얼로그 표시
+    CustomAlertDialog(showDialog = showDialog, onDismiss = { showDialog = false }, navController)
+}
 
 @Composable
 fun NaverButton(
