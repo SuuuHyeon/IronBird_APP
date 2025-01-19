@@ -17,23 +17,37 @@ import java.util.*
 fun CalendarView(onDateSelected: (LocalDate) -> Unit) {
     val currentMonth = remember { YearMonth.now() }
     val today = remember { LocalDate.now() }
-    val firstDayOfMonth = currentMonth.atDay(1 )
+    val firstDayOfMonth = currentMonth.atDay(1)
     val lastDayOfMonth = currentMonth.atEndOfMonth()
-    val daysOfWeek = java.time.DayOfWeek.values()
 
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        // 월과 년도 표시
+    // 날짜 계산
+    val firstDayOffset = firstDayOfMonth.dayOfWeek.value % 7 // 첫 번째 요일의 오프셋
+    val lastDayOffset = (7 - lastDayOfMonth.dayOfWeek.value % 7) % 7 // 마지막 요일의 남는 칸
+    val days = List(firstDayOffset) { null } + // 첫 주 빈 칸
+            (1..lastDayOfMonth.dayOfMonth).map { firstDayOfMonth.plusDays((it - 1).toLong()) } + // 날짜
+            List(lastDayOffset) { null } // 마지막 주 빈 칸
+    val groupedDates = days.chunked(7)
+
+    // UI 구성
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 16.dp), // 상단 여백 추가
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // 월과 연도 표시
         Text(
             text = "${currentMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())} ${currentMonth.year}",
             modifier = Modifier.padding(16.dp),
             textAlign = TextAlign.Center
         )
 
-        // 요일 표시
+        // 요일 헤더
+        val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            daysOfWeek.forEach { dayIfWeek ->
+            daysOfWeek.forEach { dayOfWeek ->
                 Text(
-                    text = dayIfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                    text = dayOfWeek,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
@@ -41,20 +55,20 @@ fun CalendarView(onDateSelected: (LocalDate) -> Unit) {
         }
 
         // 날짜 표시
-        val dates = (1..lastDayOfMonth.dayOfMonth).map { firstDayOfMonth.plusDays((it-1).toLong()) }
-        val groupedDates = dates.chunked(7)
-
         groupedDates.forEach { week ->
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly // 균등 정렬
+            ) {
                 week.forEach { date ->
                     Box(
                         modifier = Modifier
                             .size(40.dp)
-                            .clickable { onDateSelected(date) },
-                        // contentAlignment = Alignment.Center
+                            .clickable { date?.let { onDateSelected(it) } },
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = date.dayOfMonth.toString(),
+                            text = date?.dayOfMonth?.toString() ?: "",
                             color = if (date == today) androidx.compose.ui.graphics.Color.Red else androidx.compose.ui.graphics.Color.Black
                         )
                     }
