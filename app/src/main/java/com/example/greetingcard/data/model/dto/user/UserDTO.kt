@@ -1,18 +1,24 @@
 package com.example.greetingcard.data.model.dto.user
 
 data class UserDTO(
-    private val userId: String,
-    private val userName: String = "",
-    private val password: String,
-    private val email: String = "",
+    var userId: String,
+    var userName: String = "",
+    var password: String,
+    var email: String = "",
 ) {
     companion object {
-        fun from(userId: String, userName: String = "" , password: String, email: String = ""): UserDTO {
+        fun from(
+            userId: String,
+            userName: String = "",
+            password: String,
+            email: String = ""
+        ): UserDTO {
             return UserDTO(
                 userId = userId,
                 userName = userName,
                 password = password,
-                email = email)
+                email = email
+            )
         }
     }
 }

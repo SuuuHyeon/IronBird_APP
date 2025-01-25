@@ -35,6 +35,16 @@ class LoginViewModel : ViewModel() {
     }
 
     fun join(userDTO: UserDTO) {
+        viewModelScope.launch {
+            isLoading.value = true
+            try {
+                LoginClient.apiService.register(userDTO)
+            } catch (e: Exception) {
+                errorMessage.value = "Error: ${e.message}"
+            } finally {
+                isLoading.value = false
+            }
+        }
     }
 
     fun loginTest(userDTO: UserDTO) {

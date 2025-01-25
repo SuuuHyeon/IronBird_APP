@@ -1,11 +1,14 @@
 package com.example.greetingcard.ui.theme.ui.login.component
 
+import android.util.Log
+import android.util.Patterns
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
@@ -13,6 +16,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,7 +27,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -43,7 +52,6 @@ fun LoginJoin(
         LoginTitle("회원가입")
         JoinForm(navController, loginViewModel)
     }
-
 }
 
 @Composable
@@ -62,6 +70,17 @@ fun JoinForm(
         var userName by remember { mutableStateOf("") }
         var userEmail by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
+        var shouldShowPwd by remember { mutableStateOf(false) }
+
+        // Validation
+        var isUserIdVaild by remember { mutableStateOf(true) }
+        var isPasswordValid by remember { mutableStateOf(true) }
+        var isNameVaild by remember { mutableStateOf(true) }
+        var isEmailVaild by remember { mutableStateOf(true) }
+
+        val focusRequester = remember { FocusRequester() }
+
+
 
         Column(
             modifier = modifier
@@ -72,45 +91,85 @@ fun JoinForm(
 
             CustomInputField(
                 value = userId,
-                onValueChange = { userId = it },
+                onValueChange = {
+                    userId = it
+                    isUserIdVaild = userId.length > 4
+                },
                 placeholderText = "아이디",
-                leadingIcon = Icons.Default.Person
+                leadingIcon = Icons.Default.Person,
+                modifier = modifier.focusRequester(focusRequester)
             )
+
+            if (!isUserIdVaild) {
+                Text("아이디는 최소 4자 이상이어야 합니다.", color = MaterialTheme.colorScheme.error)
+            }
 
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    isPasswordValid = password.length >= 6
+                },
                 placeholder = { Text("비밀번호") },
+                maxLines = 1,
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
-                trailingIcon = { Icon(Icons.Default.Search, contentDescription = null) }
+                trailingIcon = {
+                    IconButton(onClick = { shouldShowPwd = !shouldShowPwd }) {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = null)
+                    }
+                },
+                modifier = modifier.fillMaxWidth(0.9f),
+                visualTransformation = if (shouldShowPwd) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
+
+            if (!isPasswordValid) {
+                Text("비밀번호는 최소 6자 이상이어야 합니다.", color = MaterialTheme.colorScheme.error)
+            }
 
             CustomInputField(
                 value = userName,
-                onValueChange = { userName = it },
+                onValueChange = {
+                    userName = it
+                    isNameVaild = userName.length >= 2
+                },
                 placeholderText = "이름",
-                leadingIcon = Icons.Default.Person
+                leadingIcon = Icons.Default.Person,
             )
-            
+
+            if (!isNameVaild) {
+                Text("비밀번호는 최소 6자 이상이여")
+            }
+
             CustomInputField(
                 value = userEmail,
-                onValueChange = { userEmail = it },
+                onValueChange = {
+                    userEmail = it
+                    isEmailVaild = Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()
+                },
                 placeholderText = "[선택] 이메일주소 (비밀번호 찾기 등 본인 확인용)",
                 leadingIcon = Icons.Default.Email
             )
+            if (!isEmailVaild) {
+                Text("유요한 이메일 주소를 입력하세요.", color = MaterialTheme.colorScheme.error)
+            }
         }
         Button(
             modifier = modifier
                 .padding(top = 30.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(0.9f)
                 .height(50.dp), // 버튼 크기 조정
             onClick = {
-                // UserDTO 객체 생성
-                val userDTO = UserDTO.from(userId, userName, password, userEmail)
-                loginViewModel.loginTest(userDTO)
+                if (isUserIdVaild && isPasswordValid && isNameVaild) {
+                    // UserDTO 객체 생성
+                    Log.d("isUserIdVaild", isUserIdVaild.toString())
+                    val userDTO = UserDTO.from(userId, userName, password, userEmail)
+                    loginViewModel.join(userDTO)
+                } else {
+                    focusRequester.requestFocus()
+                }
             },
-            shape = RoundedCornerShape(12.dp), // 둥근 모서리
-
+            shape = RoundedCornerShape(12.dp),
         ) {
             Text(
                 text = "회원가입",
@@ -125,4 +184,5 @@ fun JoinForm(
         }
     }
 }
+
 
