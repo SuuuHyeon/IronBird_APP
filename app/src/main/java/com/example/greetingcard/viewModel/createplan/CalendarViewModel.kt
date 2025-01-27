@@ -13,12 +13,15 @@ class CalendarViewModel : ViewModel() {
 
     fun selectDate(date: LocalDate) {
         _selectedDates.update { current ->
-            if (current.startDate == null) {
-                current.copy(startDate = date)  // 첫번째 클릭, 시작 날짜
-            } else if (current.endDate == null) {
-                current.copy(endDate = date)    // 두번째 클릭, 종료 날짜
-            } else {
-                SelectedDates(startDate = date) // 다시 누르면 시작 날짜로 초기화
+            when {
+                // 시작 날짜가 비어 있으면 startDate 설정
+                current.startDate == null -> current.copy(startDate = date)
+
+                // 종료 날짜가 비어 있고, 선택한 날짜가 startDate 이후일 때 endDate 설정
+                current.endDate == null && date.isAfter(current.startDate) -> current.copy(endDate = date)
+
+                // 모든 상태 초기화하고 새로운 startDate 설정
+                else -> SelectedDates(startDate = date)
             }
         }
     }

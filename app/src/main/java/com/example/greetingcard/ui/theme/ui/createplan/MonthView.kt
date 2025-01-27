@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.greetingcard.ui.theme.Purple40
 import com.example.greetingcard.ui.theme.Purple80 // ../Color.kt에서 정의된 Purple80 변수
 import com.example.greetingcard.viewModel.createplan.SelectedDates
@@ -37,7 +38,7 @@ fun MonthView(
         // 연도 및 월 표시
         Text(
             text = "${yearMonth.year}.${yearMonth.monthValue.toString().padStart(2, '0')}",
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp), // 폰트 크기 키움
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)
         )
@@ -54,7 +55,7 @@ fun MonthView(
                         6 -> Color.Blue // 토요일 파란색
                         else -> MaterialTheme.colorScheme.onSurface
                     },
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.labelLarge.copy(fontSize = 16.sp), // 요일 글씨 키움
                     fontWeight = FontWeight.Medium
                 )
             }
@@ -72,10 +73,13 @@ fun MonthView(
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            // .padding(4.dp)
-                            // .border(1.dp, Color.Gray) // 랜더링 확인 용 테두리
                             .aspectRatio(1f) // 정사각형 셀
-                            .clickable(enabled = date != null) { date?.let(onDateSelected) },
+                            .clickable(
+                                enabled = selectedDates.startDate == null ||
+                                        selectedDates.endDate != null ||
+                                        (selectedDates.startDate != null && date?.isAfter(selectedDates.startDate) == true) ?: false,
+                                onClick = { date?.let(onDateSelected) }
+                            ),
                         contentAlignment = Alignment.TopCenter // 상단 정렬
                     ) {
                         if (date != null) {
@@ -83,12 +87,12 @@ fun MonthView(
                                 verticalArrangement = Arrangement.Top,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                // 날짜 숫자 부분을 wrapping하는 Box 추가
+                                // 날짜 숫자 렌더링
                                 Box(
                                     modifier = Modifier
                                         .background(
                                             color = when (date) {
-                                                selectedDates.startDate, selectedDates.endDate -> Purple80
+                                                selectedDates.startDate, selectedDates.endDate -> Purple40
                                                 else -> Color.Transparent // 선택되지 않은 날짜는 투명
                                             },
                                             shape = RoundedCornerShape(8.dp) // 숫자만 감싸는 둥근 사각형
@@ -99,26 +103,55 @@ fun MonthView(
                                     Text(
                                         text = date.dayOfMonth.toString(),
                                         color = when {
-                                            date == today -> Purple40 // 오늘 날짜 글씨 흰색
+                                            date in listOf(
+                                                selectedDates.startDate,
+                                                selectedDates.endDate
+                                            ) -> Color.White // 선택된 날짜
+                                            date == today -> Purple40 // 오늘 날짜
+                                            selectedDates.startDate != null && date.isBefore(selectedDates.startDate) -> {
+                                                // 주말 색상 구분 (옅은 빨간색 또는 옅은 파란색)
+                                                when (date.dayOfWeek) {
+                                                    DayOfWeek.SUNDAY -> Color(0xFFFFCDD2) // 옅은 빨간색
+                                                    DayOfWeek.SATURDAY -> Color(0xFFBBDEFB) // 옅은 파란색
+                                                    else -> Color.Gray // 일반 회색
+                                                }
+                                            }
+
                                             date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red // 일요일 빨간색
                                             date.dayOfWeek == DayOfWeek.SATURDAY -> Color.Blue // 토요일 파란색
-                                            date in listOf(selectedDates.startDate, selectedDates.endDate) -> Color.White
-                                            else -> MaterialTheme.colorScheme.onSurface
+                                            else -> MaterialTheme.colorScheme.onSurface // 기본 색상
                                         },
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp), // 날짜 숫자 키움
                                         fontWeight = FontWeight.Medium
                                     )
                                 }
 
-                                // "오늘" 표시
-                                if (date == today) {
-                                    // Spacer(modifier = Modifier.height(4.dp))
-                                    Text(
-                                        text = "오늘",
-                                        color = Purple40, // 오늘 텍스트 강조 색상
-                                        style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Medium
-                                    )
+                                // "출발", "도착", "오늘" 표시
+                                when (date) {
+                                    selectedDates.startDate -> {
+                                        Text(
+                                            text = "출발",
+                                            color = Purple40,
+                                            style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp),
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+                                    selectedDates.endDate -> {
+                                        Text(
+                                            text = "도착",
+                                            color = Purple40,
+                                            style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp),
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+                                    today -> {
+                                        Text(
+                                            text = "오늘",
+                                            color = Purple40,
+                                            style = MaterialTheme.typography.labelLarge.copy(fontSize = 14.sp),
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
                                 }
                             }
                         }
