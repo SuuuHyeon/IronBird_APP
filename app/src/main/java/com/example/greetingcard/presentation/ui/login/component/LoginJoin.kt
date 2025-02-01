@@ -180,7 +180,6 @@ fun JoinForm(
         SetProfile()
 
 
-        }
         Button(
             modifier = modifier
                 .padding(top = 30.dp)
@@ -213,6 +212,8 @@ fun JoinForm(
         }
     }
 }
+
+
 
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
