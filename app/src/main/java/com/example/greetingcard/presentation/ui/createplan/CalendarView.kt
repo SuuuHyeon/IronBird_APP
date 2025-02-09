@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.ui.createplan
+package com.example.greetingcard.presentation.ui.createplan
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

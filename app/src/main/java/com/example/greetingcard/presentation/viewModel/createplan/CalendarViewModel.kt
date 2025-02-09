@@ -1,4 +1,4 @@
-package com.example.greetingcard.viewModel.createplan
+package com.example.greetingcard.presentation.viewModel.createplan
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

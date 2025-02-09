@@ -1,4 +1,4 @@
-package com.example.greetingcard.ui.theme.ui.createplan
+package com.example.greetingcard.presentation.ui.createplan
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.greetingcard.ui.theme.Purple40
 import com.example.greetingcard.ui.theme.PurpleGrey40
 import com.example.greetingcard.ui.theme.PurpleGrey80
-import com.example.greetingcard.viewModel.createplan.CalendarViewModel
+import com.example.greetingcard.presentation.viewModel.createplan.CalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
@@ -108,7 +108,9 @@ fun CalendarScreen(
                         disabledContainerColor = PurpleGrey80
                     ),
 
-                    onClick ={}
+                    onClick ={
+                        // TODO : 다음 페이지로 이동
+                    }
                 ){
                     Text(
                         text = travelDurationText,

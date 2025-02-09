@@ -1,10 +1,8 @@
-package com.example.greetingcard.ui.theme.ui.createplan
+package com.example.greetingcard.presentation.ui.createplan
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
@@ -17,9 +15,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.greetingcard.ui.theme.Purple40
-import com.example.greetingcard.ui.theme.Purple80 // ../Color.kt에서 정의된 Purple80 변수
 import com.example.greetingcard.ui.theme.PurpleGrey80
-import com.example.greetingcard.viewModel.createplan.SelectedDates
+import com.example.greetingcard.presentation.viewModel.createplan.SelectedDates
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
