@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.greetingcard.ui.theme.Purple40
 import com.example.greetingcard.ui.theme.Purple80 // ../Color.kt에서 정의된 Purple80 변수
+import com.example.greetingcard.ui.theme.PurpleGrey80
 import com.example.greetingcard.viewModel.createplan.SelectedDates
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -73,14 +74,14 @@ fun MonthView(
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1f) // 정사각형 셀
+                            .aspectRatio(1f) // 정사각형
                             .clickable(
                                 enabled = selectedDates.startDate == null ||
                                         selectedDates.endDate != null ||
                                         (selectedDates.startDate != null && date?.isAfter(selectedDates.startDate) == true) ?: false,
                                 onClick = { date?.let(onDateSelected) }
                             ),
-                        contentAlignment = Alignment.TopCenter // 상단 정렬
+                        contentAlignment = Alignment.TopCenter
                     ) {
                         if (date != null) {
                             Column(
@@ -91,37 +92,64 @@ fun MonthView(
                                 Box(
                                     modifier = Modifier
                                         .background(
-                                            color = when (date) {
-                                                selectedDates.startDate, selectedDates.endDate -> Purple40
-                                                else -> Color.Transparent // 선택되지 않은 날짜는 투명
+                                            // color = when (date) {
+                                            //     selectedDates.startDate, selectedDates.endDate -> Purple40
+                                            //     else -> Color.Transparent // 선택되지 않은 날짜는 투명
+                                            // },
+                                            color = if (date in setOf(selectedDates.startDate, selectedDates.endDate)) {
+                                                PurpleGrey80
+                                            } else if (
+                                                selectedDates.startDate != null
+                                                && selectedDates.endDate != null
+                                                && date.isAfter(selectedDates.startDate)
+                                                && date.isBefore(selectedDates.endDate)
+                                            ) {
+                                                PurpleGrey80
+                                            } else {
+                                                Color.Transparent
                                             },
-                                            shape = RoundedCornerShape(8.dp) // 숫자만 감싸는 둥근 사각형
+                                            shape = when {
+                                                date == selectedDates.startDate -> {
+                                                    when {
+                                                        selectedDates.endDate == null -> RoundedCornerShape(
+                                                            topStartPercent = 100,
+                                                            topEndPercent = 100,
+                                                            bottomStartPercent = 100,
+                                                            bottomEndPercent = 100
+                                                        )
+                                                        else -> RoundedCornerShape(
+                                                            topStartPercent = 100,
+                                                            topEndPercent = 0,
+                                                            bottomStartPercent = 100,
+                                                            bottomEndPercent = 0
+                                                        )
+                                                    }
+                                                }
+                                                date == selectedDates.endDate -> RoundedCornerShape(topStartPercent = 0, topEndPercent = 100, bottomStartPercent = 0, bottomEndPercent = 100)
+                                                else -> RoundedCornerShape(0)
+                                            }
                                         )
-                                        .padding(horizontal = 8.dp, vertical = 4.dp), // 내부 패딩 추가
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 8.dp, vertical = 4.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
                                         text = date.dayOfMonth.toString(),
                                         color = when {
-                                            date in listOf(
-                                                selectedDates.startDate,
-                                                selectedDates.endDate
-                                            ) -> Color.White // 선택된 날짜
                                             date == today -> Purple40 // 오늘 날짜
-                                            selectedDates.startDate != null && date.isBefore(selectedDates.startDate) -> {
-                                                // 주말 색상 구분 (옅은 빨간색 또는 옅은 파란색)
+                                            (selectedDates.startDate != null && date.isBefore(selectedDates.startDate)) || (selectedDates.endDate != null && date.isAfter(selectedDates.endDate)) -> {
                                                 when (date.dayOfWeek) {
                                                     DayOfWeek.SUNDAY -> Color(0xFFFFCDD2) // 옅은 빨간색
                                                     DayOfWeek.SATURDAY -> Color(0xFFBBDEFB) // 옅은 파란색
-                                                    else -> Color.Gray // 일반 회색
+                                                    else -> Color.Gray
                                                 }
                                             }
 
-                                            date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red // 일요일 빨간색
-                                            date.dayOfWeek == DayOfWeek.SATURDAY -> Color.Blue // 토요일 파란색
-                                            else -> MaterialTheme.colorScheme.onSurface // 기본 색상
+                                            date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red
+                                            date.dayOfWeek == DayOfWeek.SATURDAY -> Color.Blue
+                                            else -> MaterialTheme.colorScheme.onSurface
                                         },
-                                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp), // 날짜 숫자 키움
+                                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
                                         fontWeight = FontWeight.Medium
                                     )
                                 }

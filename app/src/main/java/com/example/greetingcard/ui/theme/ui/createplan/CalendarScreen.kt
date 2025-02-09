@@ -1,22 +1,30 @@
 package com.example.greetingcard.ui.theme.ui.createplan
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.greetingcard.ui.theme.Purple40
+import com.example.greetingcard.ui.theme.PurpleGrey40
+import com.example.greetingcard.ui.theme.PurpleGrey80
 import com.example.greetingcard.viewModel.createplan.CalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.temporal.ChronoUnit
 
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +34,13 @@ fun CalendarScreen(
     onBack: () -> Unit = {} // 뒤로가기 콜백
 ) {
     val selectedDates by viewModel.selectedDates.collectAsState()
-    val currentMonth = remember { LocalDate.now().withDayOfMonth(1) } // 오늘의 첫 날
+    val currentMonth = remember { LocalDate.now().withDayOfMonth(1) }
+    val travelDurationText = if (selectedDates.startDate != null && selectedDates.endDate != null) {
+        val days = ChronoUnit.DAYS.between(selectedDates.startDate, selectedDates.endDate)
+        "${days}박 ${days + 1}일 일정 등록하기"
+    } else {
+        "날짜를 선택해주세요"
+    }
 
     Scaffold(
         topBar = {
@@ -47,28 +61,19 @@ fun CalendarScreen(
                         )
                     }
                 },
-                // backgroundColor = MaterialTheme.colorScheme.primary,
-                // contentColor = MaterialTheme.colorScheme.onPrimary
             )
         },
         content = { innerPadding ->
-            Column(
+            Box(
                 modifier = Modifier
                     .padding(innerPadding)
                     .padding(16.dp)
+                    .fillMaxSize()
             ) {
-                // 선택된 날짜 표시
-                Text(
-                    text = "시작 날짜 : ${selectedDates.startDate ?: "선택되지 않음"}\n" +
-                            "종료 날짜 : ${selectedDates.endDate ?: "선택되지 않음"}",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(8.dp)
-                )
-
-                // LazyColumn으로 스크롤 가능한 달력 구현
+                // 스크롤 가능한 달력
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize(), // 연한 회색 배경
+                        .fillMaxSize(),
                     contentPadding = PaddingValues(vertical = 16.dp) // 스크롤 뷰 상하 패딩
                 ) {
                     // 오늘 포함 13개월 생성
@@ -81,6 +86,36 @@ fun CalendarScreen(
                         )
                         Spacer(modifier = Modifier.height(24.dp)) // 각 달 간의 간격
                     }
+                }
+
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(25.dp)
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(12.dp),
+                            ambientColor = Color.Black.copy(alpha = 0.3f),
+                            spotColor = Color.Black.copy(alpha = 0.5f)
+                        ),
+                    enabled = selectedDates.startDate != null && selectedDates.endDate != null,
+                    colors = ButtonColors(
+                        contentColor = Color.White,
+                        containerColor = Purple40,
+                        disabledContentColor = PurpleGrey40,
+                        disabledContainerColor = PurpleGrey80
+                    ),
+
+                    onClick ={}
+                ){
+                    Text(
+                        text = travelDurationText,
+                        style = TextStyle(
+                            fontSize = 16.sp
+                        )
+                    )
                 }
             }
         }
