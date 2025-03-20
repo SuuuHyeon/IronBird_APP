@@ -39,7 +39,6 @@ fun PlanningScreen(listState: LazyListState) {
     ) {
         item {
             SearchBar()
-            Spacer(modifier = Modifier.height(400.dp))
         }
         item {
             FeaturesGrid()
