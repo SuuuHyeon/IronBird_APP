@@ -56,7 +56,8 @@ fun LoginButtonContainer(
 
         Test(
             onClick = {
-                navController.navigate("home")
+                // TODO: 임시 설정
+                navController.navigate("plan_destination")
             }
         )
 

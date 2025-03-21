@@ -5,7 +5,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.greetingcard.presentation.navigation.Screen
 import com.example.greetingcard.presentation.ui.createplan.CalendarScreen
-import com.example.greetingcard.presentation.ui.createplan.DestinationScreen
 import com.example.greetingcard.presentation.ui.home.HomePage
 import com.example.greetingcard.presentation.ui.home.posting.CreatePostPage
 import com.example.greetingcard.presentation.ui.login.component.Login
@@ -40,7 +39,8 @@ fun SetUpNavGraph(
             CalendarScreen(navController = navController)
         }
         composable(Screen.SelectDestination.route) {
-            DestinationScreen(navController = navController)
+            val postViewModel: PostViewModel = viewModel()
+            TravelDestinationScreen(navController = navController, postViewModel = postViewModel)
         }
         composable(Screen.CreatePost.route) {
             val postViewModel: PostViewModel = viewModel()

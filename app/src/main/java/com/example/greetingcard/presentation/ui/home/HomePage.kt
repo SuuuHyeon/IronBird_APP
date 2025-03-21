@@ -48,6 +48,7 @@ fun HomePage(navController: NavHostController, homeViewModel: HomeViewModel = vi
             if (homeViewModel.selectedTabIndex == 0) {
                 CreatePlanFloatingButton {
                     navController.navigate("plan_calendar")
+//                    navController.navigate("plan_destination")
                 }
             }
         },
