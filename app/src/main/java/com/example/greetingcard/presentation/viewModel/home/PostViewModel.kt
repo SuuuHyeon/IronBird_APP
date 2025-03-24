@@ -37,6 +37,18 @@ class PostViewModel : ViewModel() {
         }
     }
 
+    private val _selectedDestination = MutableStateFlow("")
+    val selectedDestination = _selectedDestination.asStateFlow()
+
+    fun selectDestination(destination: String) {
+        if (_selectedDestination.value == destination && _selectedDestination.value.isNotBlank()) {
+            Log.d("여행지 클릭", "선택된 여행지 클릭함")
+            _selectedDestination.value = ""
+        } else {
+            _selectedDestination.value = destination
+        }
+    }
+
     // 입력된 쿼리 클리어
     fun onClearQuery() {
         _searchQuery.value = ""

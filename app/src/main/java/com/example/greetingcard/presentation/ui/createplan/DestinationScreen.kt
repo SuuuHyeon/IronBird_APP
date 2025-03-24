@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,6 +63,8 @@ fun TravelDestinationScreen(
     val searchResults by postViewModel.searchResults.collectAsState()
     val recommendedDestinations = postViewModel.recommendedDestinations
     val recentQueries by postViewModel.recentQueries.collectAsState()
+
+    val selectedDestination by postViewModel.selectedDestination.collectAsState()
 
     Scaffold(
         containerColor = Color.White,
@@ -112,9 +115,16 @@ fun TravelDestinationScreen(
                 if (searchQuery.isNotEmpty()) {
                     // 검색 결과
                     if (searchResults.isNotEmpty()) {
+                        Text(
+                            text = "검색 결과",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
                         SearchResultsList(
+                            selectedDestination = selectedDestination,
                             searchResults = searchResults,
-                            onDestinationClick = { /* TODO */ }
+                            onDestinationClick = { postViewModel.selectDestination(it) }
                         )
                     } else {
                         // 검색 결과 없음 메시지
@@ -140,8 +150,9 @@ fun TravelDestinationScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     RecommendedDestinations(
+                        selectedDestination = selectedDestination,
                         destinations = recommendedDestinations,
-                        onDestinationClick = { /* TODO */ }
+                        onDestinationClick = { postViewModel.selectDestination(it) }
                     )
                 }
             }
@@ -149,7 +160,7 @@ fun TravelDestinationScreen(
         bottomBar = {
             CustomBottomBar(
                 label = "다음",
-                enabled = true,
+                enabled = selectedDestination.isNotEmpty(),
                 onBottomBarClick = { /* TODO */ },
             )
         }
@@ -216,15 +227,17 @@ fun SearchBar(
 // 검색 결과 리스트
 @Composable
 fun SearchResultsList(
+    selectedDestination: String?,
     searchResults: List<String>,
     onDestinationClick: (String) -> Unit
 ) {
     LazyColumn(
+
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+//        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(searchResults, key = { it }) { destination ->
-            TravelDestinationItem(destination, onDestinationClick)
+            TravelDestinationItem(selectedDestination, destination, onDestinationClick)
         }
     }
 }
@@ -232,52 +245,66 @@ fun SearchResultsList(
 // 추천 여행지
 @Composable
 fun RecommendedDestinations(
+    selectedDestination: String?,
     destinations: List<String>,
     onDestinationClick: (String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+//        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(destinations, key = { it }) { destination ->
-            TravelDestinationItem(destination, onDestinationClick)
+            TravelDestinationItem(selectedDestination, destination, onDestinationClick)
         }
     }
 }
 
 @Composable
 fun TravelDestinationItem(
+    selectedDestination: String?,
     destination: String,
     onClick: (String) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(8.dp))
+            .clickable { onClick(destination) }
+            .background(
+                if (selectedDestination == destination) Color(0xFFE3F2FD) else Color.Transparent
+            )
+            .padding(12.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable { onClick(destination) }
-
+            modifier = Modifier.clip(CircleShape)
         ) {
             Image(
                 painter = painterResource(R.drawable.sea),
                 contentScale = ContentScale.FillBounds,
                 contentDescription = "여행지 이미지",
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(50.dp)
                     .clip(CircleShape)
             )
         }
+        Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = destination,
-            fontSize = 13.sp,
-            modifier = Modifier
-                .clip(CircleShape)
-                .padding(horizontal = 16.dp, vertical = 2.dp),
+            fontSize = 14.sp,
+            fontWeight = if (selectedDestination == destination) FontWeight.Bold else FontWeight.Normal,
             color = Color.Black,
-            style = MaterialTheme.typography.bodyMedium
+            modifier = Modifier.weight(1f)
         )
+        if (selectedDestination == destination) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = "Selected",
+                tint = Color(0xFF4A90E2),
+                modifier = Modifier.size(20.dp)
+            )
+        }
     }
 }
 
@@ -315,7 +342,6 @@ fun RecentSearches(
                     modifier = Modifier
                         .background(Color(0xffe0e0e0), shape = RoundedCornerShape(50.dp))
                         .wrapContentWidth()
-//                        .width(70.dp)
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                         .height(30.dp)
                         .clickable { onQueryClick(query) },
