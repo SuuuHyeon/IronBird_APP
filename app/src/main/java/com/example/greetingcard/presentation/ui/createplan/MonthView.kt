@@ -124,10 +124,15 @@ fun MonthView(
                             )
                             .weight(1f)
                             .aspectRatio(1f)
-
-                            .clickable(enabled = selectedDates.startDate == null || selectedDates.endDate != null || (date?.equals(
-                                selectedDates.startDate
-                            ) == true || date?.isAfter(selectedDates.startDate) == true),
+                            .clickable(
+                                enabled = date != null
+                                        && !date.isBefore(LocalDate.now()) // 오늘 이전 날짜는 비활성화
+                                        && (
+                                        selectedDates.startDate == null
+                                                || selectedDates.endDate != null
+                                                || date == selectedDates.startDate
+                                                || date.isAfter(selectedDates.startDate)
+                                        ),
                                 onClick = { date?.let(onDateSelected) }),
                         contentAlignment = Alignment.Center
                     ) {
@@ -156,7 +161,7 @@ fun MonthView(
                                 today -> {
                                     DateLabelText(
                                         date = date.dayOfMonth.toString(),
-                                        label = "●",
+                                        label = if (date.dayOfMonth == selectedDates.startDate?.dayOfMonth) "출발" else "●",
                                         color = Color.White,
                                         modifier = Modifier.align(Alignment.BottomCenter)
                                     )
