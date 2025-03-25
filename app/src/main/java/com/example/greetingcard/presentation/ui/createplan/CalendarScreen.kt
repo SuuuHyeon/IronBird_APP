@@ -1,37 +1,44 @@
 package com.example.greetingcard.presentation.ui.createplan
 
-import androidx.compose.foundation.layout.*
+import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.greetingcard.ui.theme.Purple40
-import com.example.greetingcard.ui.theme.PurpleGrey40
-import com.example.greetingcard.ui.theme.PurpleGrey80
+import androidx.navigation.NavController
+import com.example.greetingcard.presentation.ui.home.planning.CustomBottomBar
 import com.example.greetingcard.presentation.viewModel.createplan.CalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 
-@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarScreen(
+    navController: NavController,
     viewModel: CalendarViewModel = viewModel(),
-    onBack: () -> Unit = {} // 뒤로가기 콜백
 ) {
     val selectedDates by viewModel.selectedDates.collectAsState()
     val currentMonth = remember { LocalDate.now().withDayOfMonth(1) }
@@ -43,8 +50,12 @@ fun CalendarScreen(
     }
 
     Scaffold(
+        containerColor = Color.White,
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                ),
                 title = {
                     Text(
                         text = "여행일정 등록",
@@ -54,27 +65,24 @@ fun CalendarScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "뒤로가기"
+                            imageVector = Icons.Default.Close, contentDescription = "뒤로가기"
                         )
                     }
                 },
             )
         },
         content = { innerPadding ->
+            Log.d("innerPadding", "$innerPadding")
             Box(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .padding(16.dp)
                     .fillMaxSize()
             ) {
                 // 스크롤 가능한 달력
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 16.dp) // 스크롤 뷰 상하 패딩
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     // 오늘 포함 13개월 생성
                     items(generateMonths(currentMonth, 13)) { month ->
@@ -84,43 +92,18 @@ fun CalendarScreen(
                             onDateSelected = { date -> viewModel.selectDate(date) },
                             selectedDates = selectedDates
                         )
-                        Spacer(modifier = Modifier.height(24.dp)) // 각 달 간의 간격
+                        Spacer(modifier = Modifier.height(20.dp)) // 각 달 간의 간격
                     }
-                }
-
-                Button(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(25.dp)
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .shadow(
-                            elevation = 8.dp,
-                            shape = RoundedCornerShape(12.dp),
-                            ambientColor = Color.Black.copy(alpha = 0.3f),
-                            spotColor = Color.Black.copy(alpha = 0.5f)
-                        ),
-                    enabled = selectedDates.startDate != null && selectedDates.endDate != null,
-                    colors = ButtonColors(
-                        contentColor = Color.White,
-                        containerColor = Purple40,
-                        disabledContentColor = PurpleGrey40,
-                        disabledContainerColor = PurpleGrey80
-                    ),
-
-                    onClick ={
-                        // TODO : 다음 페이지로 이동
-                    }
-                ){
-                    Text(
-                        text = travelDurationText,
-                        style = TextStyle(
-                            fontSize = 16.sp
-                        )
-                    )
                 }
             }
-        }
+        },
+        bottomBar = {
+            CustomBottomBar(
+                label = travelDurationText,
+                enabled = selectedDates.startDate != null && selectedDates.endDate != null,
+                onBottomBarClick = { navController.navigate("plan_destination") }
+            )
+        },
     )
 }
 

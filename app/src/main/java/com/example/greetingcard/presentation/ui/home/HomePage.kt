@@ -47,7 +47,8 @@ fun HomePage(navController: NavHostController, homeViewModel: HomeViewModel = vi
             // TODO: 추후 포스팅 탭에서 가장 가까운 여행 일정 페이지로 이동하는 플로팅 버튼 생성 예정
             if (homeViewModel.selectedTabIndex == 0) {
                 CreatePlanFloatingButton {
-                    navController.navigate("create_plan")
+                    navController.navigate("plan_calendar")
+//                    navController.navigate("plan_destination")
                 }
             }
         },
