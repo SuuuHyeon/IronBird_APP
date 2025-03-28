@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -83,7 +84,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
     // Material Icons
-    implementation ("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
 
     // Coil
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
@@ -97,6 +98,10 @@ dependencies {
     implementation("com.kakao.sdk:v2-friend:2.20.1") // 피커 API 모듈
     implementation("com.kakao.sdk:v2-navi:2.20.1") // 카카오내비 API 모듈
     implementation("com.kakao.sdk:v2-cert:2.20.1") // 카카오톡 인증 서비스 API 모듈
+
+
+    // 이미지처치 라이브러리
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 
 }

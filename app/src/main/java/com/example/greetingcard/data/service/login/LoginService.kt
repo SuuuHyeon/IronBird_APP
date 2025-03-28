@@ -11,15 +11,19 @@ import retrofit2.http.POST
 interface LoginService {
 
     @FormUrlEncoded
-    @POST("/login")
+    @POST("login")
     suspend fun login(
         @Field("username") username: String,
         @Field("password") password: String
     ): Response<LoginResponse>
 
+    @POST("register")
+    suspend fun register(
+        @Body userDTO: UserDTO
+    )
 
 
-    @POST("/api/user/test")
+    @POST("api/user/test")
     suspend fun loginTest(
         @Body userDTO: UserDTO,
     ): Response<UserDTO>
