@@ -61,7 +61,7 @@ fun HomePage(navController: NavHostController, homeViewModel: HomeViewModel = vi
         ) {
             // selectedTabIndex에 따라 화면 변경
             if (homeViewModel.selectedTabIndex == 0) {
-                PlanningScreen(listState = listStates[0])
+                PlanningScreen(navController = navController, listState = listStates[0])
             } else {
                 PostingTab(homeViewModel = homeViewModel, listState = listStates[1])
             }

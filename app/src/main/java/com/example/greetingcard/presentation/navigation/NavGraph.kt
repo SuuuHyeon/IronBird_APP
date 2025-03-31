@@ -10,6 +10,7 @@ import com.example.greetingcard.presentation.ui.home.posting.CreatePostPage
 import com.example.greetingcard.presentation.ui.login.component.Login
 import com.example.greetingcard.presentation.ui.login.component.LoginFinder
 import com.example.greetingcard.presentation.ui.login.component.LoginJoin
+import com.example.greetingcard.presentation.ui.my_info.MyPlanScreen
 import com.example.greetingcard.presentation.viewModel.home.HomeViewModel
 import com.example.greetingcard.presentation.viewModel.home.PostViewModel
 
@@ -48,6 +49,10 @@ fun SetUpNavGraph(
                 navController = navController,
                 postViewModel = postViewModel,
             )
+        }
+        // 내 플랜 화면
+        composable(Screen.MyPlan.route) {
+            MyPlanScreen(navController = navController)
         }
     }
 }

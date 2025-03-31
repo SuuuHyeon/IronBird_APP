@@ -1,5 +1,6 @@
 package com.example.greetingcard.presentation.ui.home.planning
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,17 +31,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 
 // 플래닝 화면
 @Composable
-fun PlanningScreen(listState: LazyListState) {
+fun PlanningScreen(navController: NavController, listState: LazyListState) {
     println("플래닝탭 listState: $listState")
     LazyColumn(
         state = listState,
     ) {
         item {
             SearchBar()
+        }
+        item {
+            UserInfoCard(
+                modifier = Modifier.padding(horizontal = 30.dp, vertical = 10.dp),
+                onUserProfileClicked = {
+                    Log.d(
+                        "UserInfo Click",
+                        "============ Click ============"
+                    )
+                },
+                onPlanClicked = { navController.navigate("my_plan") },
+                onPostingClicked = { Log.d("Posting Click", "============ Click ============") })
         }
         item {
             FeaturesGrid()
