@@ -159,9 +159,12 @@ fun TravelDestinationScreen(
         },
         bottomBar = {
             CustomBottomBar(
-                label = "다음",
+                label = "생성하기",
                 enabled = selectedDestination.isNotEmpty(),
-                onBottomBarClick = { /* TODO */ },
+                onBottomBarClick = {
+                    // TODO: 플랜 생성 로직 및 화면 이동
+
+                },
             )
         }
     )
