@@ -1,16 +1,19 @@
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.greetingcard.presentation.navigation.Screen
-import com.example.greetingcard.presentation.ui.createplan.CalendarScreen
-import com.example.greetingcard.presentation.ui.home.HomePage
-import com.example.greetingcard.presentation.ui.home.posting.CreatePostPage
-import com.example.greetingcard.presentation.ui.login.component.Login
-import com.example.greetingcard.presentation.ui.login.component.LoginFinder
-import com.example.greetingcard.presentation.ui.login.component.LoginJoin
-import com.example.greetingcard.presentation.ui.my_info.MyPlanScreen
+import com.example.greetingcard.presentation.view.home.HomePage
+import com.example.greetingcard.presentation.view.home.posting.CreatePostPage
+import com.example.greetingcard.presentation.view.login.component.Login
+import com.example.greetingcard.presentation.view.login.component.LoginFinder
+import com.example.greetingcard.presentation.view.login.component.LoginJoin
+import com.example.greetingcard.presentation.view.my_info.MyPlanScreen
+import com.example.greetingcard.presentation.view.plan.createplan.CalendarScreen
+import com.example.greetingcard.presentation.view.plan.detailplan.DetailPlanScreen
 import com.example.greetingcard.presentation.viewModel.home.HomeViewModel
 import com.example.greetingcard.presentation.viewModel.home.PostViewModel
 
@@ -53,6 +56,14 @@ fun SetUpNavGraph(
         // 내 플랜 화면
         composable(Screen.MyPlan.route) {
             MyPlanScreen(navController = navController)
+        }
+        // 플랜 상세 화면
+        composable(
+            Screen.DetailPlan.route,
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val planId: Int? = backStackEntry.arguments?.getInt("id")
+            DetailPlanScreen(planId = planId)
         }
     }
 }

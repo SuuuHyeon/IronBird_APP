@@ -12,5 +12,6 @@ sealed class Screen(val route: String) {
     object CreatePost : Screen(route = "create_post")
 
     object MyPlan : Screen(route = "my_plan") // 내 플랜 스크린
+    object DetailPlan : Screen(route = "detail_plan/{id}")
 }
 
