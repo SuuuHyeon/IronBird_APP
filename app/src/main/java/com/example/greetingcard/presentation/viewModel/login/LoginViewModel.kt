@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.greetingcard.data.client.login.LoginClient
 import com.example.greetingcard.data.model.dto.user.UserDTO
+import com.example.greetingcard.data.source.api.LoginClient
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
