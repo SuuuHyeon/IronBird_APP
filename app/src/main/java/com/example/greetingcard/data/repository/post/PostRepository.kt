@@ -1,8 +1,8 @@
 package com.example.greetingcard.data.repository.post
 
-import com.example.greetingcard.data.client.RetrofitInstance
 import com.example.greetingcard.data.model.response.Post
-import com.example.greetingcard.data.service.post.PostService
+import com.example.greetingcard.data.source.api.PostService
+import com.example.greetingcard.data.source.api.RetrofitInstance
 import retrofit2.Response
 
 class PostRepository {
