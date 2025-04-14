@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -186,7 +187,7 @@ fun PlanDetailContent(plan: Plan) {
         }
 
         // 일정 리스트
-        LazyColumn(modifier = Modifier.padding(8.dp)) {
+        LazyColumn(modifier = Modifier.padding(vertical = 8.dp)) {
             items(dayList[selectedDay.value] ?: emptyList()) { schedule ->
                 ScheduleItem(
                     schedule = schedule,
@@ -195,7 +196,7 @@ fun PlanDetailContent(plan: Plan) {
                     })
             }
             item {
-                Row(modifier = Modifier.padding(horizontal = 10.dp)) {
+                Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                     OutlinedButton(
 //                        contentPadding = PaddingValues(0.dp),
                         modifier = Modifier.fillMaxWidth(),
@@ -217,24 +218,27 @@ fun ScheduleItem(schedule: Schedule, onScheduleClicked: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 12.dp)
+            .padding(vertical = 8.dp)
     ) {
         // 시간
         Text(
+            textAlign = TextAlign.Center,
             text = schedule.time,
-            modifier = Modifier.width(60.dp),
-            color = Color.Gray
+            modifier = Modifier.padding(start = 16.dp),
+            color = Color.Gray,
+            fontSize = 14.sp
         )
 
         // 카드
         Card(
             modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
                 .shadow(
                     elevation = 3.dp,
                     shape = RoundedCornerShape(12.dp),
                     ambientColor = Color.Black.copy(alpha = 0.05f),
-                    spotColor = Color.Black.copy(alpha = 0.3f)
+                    spotColor = Color.Black.copy(alpha = 0.4f)
                 )
                 .clickable {
                     onScheduleClicked()
